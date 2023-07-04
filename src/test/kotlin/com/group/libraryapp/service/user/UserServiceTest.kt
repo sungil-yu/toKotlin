@@ -5,6 +5,7 @@ import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.dto.user.request.UserCreateRequest
 import com.group.libraryapp.dto.user.request.UserUpdateRequest
 import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -19,7 +20,7 @@ class UserServiceTest @Autowired constructor(
 ) {
 
 
-    @BeforeEach
+    @AfterEach
     fun beforeEach() {
         userRepository.deleteAll()
     }

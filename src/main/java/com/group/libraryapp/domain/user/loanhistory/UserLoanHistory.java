@@ -27,6 +27,8 @@ public class UserLoanHistory {
 
   }
 
+
+
   public UserLoanHistory(User user, String bookName, boolean isReturn) {
     this.user = user;
     this.bookName = bookName;
@@ -35,6 +37,13 @@ public class UserLoanHistory {
 
   public String getBookName() {
     return this.bookName;
+  }
+
+  public User getUser() {
+    return user;
+  }
+  public boolean isReturn() {
+    return isReturn;
   }
 
   public void doReturn() {
