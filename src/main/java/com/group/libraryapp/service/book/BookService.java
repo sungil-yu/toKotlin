@@ -1,6 +1,7 @@
 package com.group.libraryapp.service.book;
 
 import com.group.libraryapp.domain.book.Book;
+import com.group.libraryapp.domain.book.JavaBook;
 import com.group.libraryapp.domain.book.BookRepository;
 import com.group.libraryapp.domain.user.User;
 import com.group.libraryapp.domain.user.UserRepository;
@@ -30,7 +31,7 @@ public class BookService {
 
   @Transactional
   public void saveBook(BookRequest request) {
-    Book newBook = new Book(request.getName());
+    Book newBook = new Book(request.getName(), null); //자바에서는 코틀린 코드의 default parameter 인식 불가
     bookRepository.save(newBook);
   }
 
