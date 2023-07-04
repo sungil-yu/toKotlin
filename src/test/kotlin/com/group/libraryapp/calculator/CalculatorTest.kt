@@ -1,6 +1,5 @@
 package com.group.libraryapp.calculator
 
-import java.lang.IllegalArgumentException
 
 fun main() {
     val calculatorTest = CalculatorTest()
@@ -13,8 +12,6 @@ class CalculatorTest {
     fun addTest() {
         //given
         val calculator = Calculator(5)
-
-
         //when
         calculator.add(3)
 
@@ -26,17 +23,18 @@ class CalculatorTest {
         //            throw IllegalStateException()
         //        }
 
-        //2. number 변수에 접근하여 값을 가져오기. 접근 지시자 public으로 변경
+        //2. number 변수에 접근하여 값을 가져오기. 접근 지시자 public 변경
         //        if (calculator.number != 8) {
         //            throw IllegalStateException()
         //        }
 
 
-        //3. Backing Property 사용하기. ( the method i chose )
+        //3. Backing Property 사용하기. ( the method I chose )
         //then
         if (calculator.number != 8) {
             throw IllegalStateException()
         }
     }
+
 
 }
