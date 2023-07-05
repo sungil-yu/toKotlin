@@ -17,7 +17,6 @@ class UserServiceTest @Autowired constructor(
      private val userService: UserService
 ) {
 
-
     @AfterEach
     fun beforeEach() {
         userRepository.deleteAll()
