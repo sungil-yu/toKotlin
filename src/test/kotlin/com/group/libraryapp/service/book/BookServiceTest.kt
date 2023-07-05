@@ -51,7 +51,6 @@ class BookServiceTest @Autowired constructor(
 
         bookService.loanBook(bookLoanRequest)
 
-
         val result = userLoanHistoryRepository.findAll()
 
         assertThat(result).hasSize(1)
@@ -66,8 +65,6 @@ class BookServiceTest @Autowired constructor(
         val user = userRepository.save(User("oncerun", null))
         val bookLoanRequest = BookLoanRequest(user.name, book.name)
         userLoanHistoryRepository.save(UserLoanHistory(user, book.name, false))
-
-
 
         assertThrows<IllegalArgumentException> {
             bookService.loanBook(bookLoanRequest)

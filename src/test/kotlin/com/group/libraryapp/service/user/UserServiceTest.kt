@@ -4,6 +4,7 @@ import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.dto.user.request.UserCreateRequest
 import com.group.libraryapp.dto.user.request.UserUpdateRequest
+import com.group.libraryapp.util.fail
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Disabled
@@ -28,10 +29,10 @@ class UserServiceTest @Autowired constructor(
 
         userService.saveUser(request)
 
-        val user = userRepository.findByName("oncerun").orElseThrow()
+        val user = userRepository.findByName("oncerun") ?: fail()
 
         assertThat(user.name).isEqualTo("oncerun")
-        assertThat(user?.age).isNull()
+        assertThat(user.age).isNull()
     }
 
 
