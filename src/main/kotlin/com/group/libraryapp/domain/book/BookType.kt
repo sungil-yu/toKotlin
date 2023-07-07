@@ -14,6 +14,7 @@ enum class BookType constructor(
 
     companion object {
         fun fromValue(value: String): BookType {
+
             return values().firstOrNull {
                 it.value == value
             } ?: throw IllegalArgumentException("Format $value is illegal")
