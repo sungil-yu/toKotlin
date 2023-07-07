@@ -7,6 +7,7 @@ import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistoryRepository
+import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
 import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
@@ -57,7 +58,7 @@ class BookServiceTest @Autowired constructor(
         assertThat(result).hasSize(1)
         assertThat(result[0].bookName).isEqualTo("alice")
         assertThat(result[0].user.id).isEqualTo(user.id)
-        assertThat(result[0].isReturn).isFalse
+        assertThat(result[0].status).isEqualTo(UserLoanStatus.LOANED)
     }
 
     @Test
@@ -65,7 +66,7 @@ class BookServiceTest @Autowired constructor(
         val book = bookRepository.save(Book.fixture("alice"))
         val user = userRepository.save(User("oncerun", null))
         val bookLoanRequest = BookLoanRequest(user.name, book.name)
-        userLoanHistoryRepository.save(UserLoanHistory(user, book.name, false))
+        userLoanHistoryRepository.save(UserLoanHistory.fixture(user, book.name))
 
         assertThrows<IllegalArgumentException> {
             bookService.loanBook(bookLoanRequest)
@@ -79,7 +80,7 @@ class BookServiceTest @Autowired constructor(
     fun returnBookTest() {
         val book = bookRepository.save(Book.fixture("alice"))
         val user = userRepository.save(User("oncerun", null))
-        userLoanHistoryRepository.save(UserLoanHistory(user, book.name, false))
+        userLoanHistoryRepository.save(UserLoanHistory.fixture(user, book.name))
         val bookReturnRequest = BookReturnRequest(user.name, book.name)
 
         bookService.returnBook(bookReturnRequest)
@@ -87,6 +88,6 @@ class BookServiceTest @Autowired constructor(
         val results = userLoanHistoryRepository.findAll()
 
         assertThat(results).hasSize(1)
-        assertThat(results[0].isReturn).isTrue
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
     }
 }
