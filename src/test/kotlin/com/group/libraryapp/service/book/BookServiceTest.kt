@@ -2,6 +2,7 @@ package com.group.libraryapp.service.book
 
 import com.group.libraryapp.domain.book.Book
 import com.group.libraryapp.domain.book.BookRepository
+import com.group.libraryapp.domain.book.BookType
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory
@@ -11,7 +12,6 @@ import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,18 +34,19 @@ class BookServiceTest @Autowired constructor(
 
     @Test
     fun saveBookTest() {
-        val bookRequest = BookRequest("alice")
+        val bookRequest = BookRequest("alice", BookType.UNCATEGORIZED)
 
         bookService.saveBook(bookRequest)
 
         val books = bookRepository.findAll()
         assertThat(books).hasSize(1)
         assertThat(books[0]).extracting("name").isEqualTo("alice")
+        assertThat(books[0].type).isEqualTo(BookType.UNCATEGORIZED)
     }
 
     @Test
     fun loadBookTest() {
-        val book = bookRepository.save(Book("alice"))
+        val book = bookRepository.save(Book.fixture("alice"))
         val user = userRepository.save(User("oncerun", null))
         val bookLoanRequest = BookLoanRequest(user.name, book.name)
 
@@ -61,7 +62,7 @@ class BookServiceTest @Autowired constructor(
 
     @Test
     fun loadBookFailTest() {
-        val book = bookRepository.save(Book("alice"))
+        val book = bookRepository.save(Book.fixture("alice"))
         val user = userRepository.save(User("oncerun", null))
         val bookLoanRequest = BookLoanRequest(user.name, book.name)
         userLoanHistoryRepository.save(UserLoanHistory(user, book.name, false))
@@ -76,7 +77,7 @@ class BookServiceTest @Autowired constructor(
 
     @Test
     fun returnBookTest() {
-        val book = bookRepository.save(Book("alice"))
+        val book = bookRepository.save(Book.fixture("alice"))
         val user = userRepository.save(User("oncerun", null))
         userLoanHistoryRepository.save(UserLoanHistory(user, book.name, false))
         val bookReturnRequest = BookReturnRequest(user.name, book.name)
