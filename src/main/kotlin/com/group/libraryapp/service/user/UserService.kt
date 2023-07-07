@@ -26,10 +26,8 @@ class UserService (
     }
 
     @Transactional
-    fun getUsers(): List<UserResponse> {
-        return userRepository.findAll()
-            .map{ UserResponse.of(it) }
-    }
+    fun getUsers(): List<UserResponse> =
+        userRepository.findAll().map(UserResponse::of)
 
     @Transactional
     fun updateUserName(request: UserUpdateRequest) {
@@ -42,20 +40,8 @@ class UserService (
         val user = userRepository.findByName(name) ?: fail()
         userRepository.delete(user)
     }
-
-    fun getUserLoanHistories(): List<UserLoanHistoryResponse> {
-        return userRepository.findAll().map {user ->
-            UserLoanHistoryResponse(
-                name = user.name,
-                books = user.userLoanHistories.map { history ->
-                    BookHistoryResponse(
-                        name = history.bookName,
-                        isReturn = history.status == UserLoanStatus.RETURNED
-                    )
-                }
-            )
-        }
-    }
+    fun getUserLoanHistories(): List<UserLoanHistoryResponse> =
+        userRepository.findAll().map(UserLoanHistoryResponse::of)
 
 
 }
