@@ -2,8 +2,11 @@ package com.group.libraryapp.service.user
 
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
+import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
 import com.group.libraryapp.dto.user.request.UserCreateRequest
 import com.group.libraryapp.dto.user.request.UserUpdateRequest
+import com.group.libraryapp.dto.user.response.BookHistoryResponse
+import com.group.libraryapp.dto.user.response.UserLoanHistoryResponse
 import com.group.libraryapp.dto.user.response.UserResponse
 import com.group.libraryapp.util.fail
 import com.group.libraryapp.util.findByIdOrThrow
@@ -23,10 +26,8 @@ class UserService (
     }
 
     @Transactional
-    fun getUsers(): List<UserResponse> {
-        return userRepository.findAll()
-            .map{ UserResponse.of(it) }
-    }
+    fun getUsers(): List<UserResponse> =
+        userRepository.findAll().map(UserResponse::of)
 
     @Transactional
     fun updateUserName(request: UserUpdateRequest) {
@@ -39,6 +40,8 @@ class UserService (
         val user = userRepository.findByName(name) ?: fail()
         userRepository.delete(user)
     }
+    fun getUserLoanHistories(): List<UserLoanHistoryResponse> =
+        userRepository.findAll().map(UserLoanHistoryResponse::of)
 
 
 }
