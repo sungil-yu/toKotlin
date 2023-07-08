@@ -41,7 +41,6 @@ class UserService (
         userRepository.delete(user)
     }
     fun getUserLoanHistories(): List<UserLoanHistoryResponse> =
-        userRepository.findAll().map(UserLoanHistoryResponse::of)
-
+        userRepository.findAllWithHistories().map(UserLoanHistoryResponse::of)
 
 }
