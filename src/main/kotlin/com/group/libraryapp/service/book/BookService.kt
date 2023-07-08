@@ -8,6 +8,7 @@ import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
 import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
+import com.group.libraryapp.dto.book.response.BookStatResponse
 import com.group.libraryapp.util.fail
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -33,9 +34,7 @@ class BookService constructor(
         if (userLoanHistoryRepository.findByBookNameAndStatus(request.bookName, UserLoanStatus.LOANED) != null) {
             throw IllegalArgumentException("진작 대출되어 있는 책입니다")
         }
-
         val user = userRepository.findByName(request.userName) ?: fail()
-
 
         user.loanBook(book)
     }
@@ -44,6 +43,15 @@ class BookService constructor(
     fun returnBook(request: BookReturnRequest) {
         val user = userRepository.findByName(request.userName)?: fail()
         user.returnBook(request.bookName)
+    }
+
+    fun countLoadedBook(): Int {
+//        return userLoanHistoryRepository.findAllByStatus(UserLoanStatus.LOANED).size
+        return userLoanHistoryRepository.countByStatus(UserLoanStatus.LOANED).toInt()
+    }
+
+    fun getBookStatistics(): List<BookStatResponse> {
+        return bookRepository.getStats()
     }
 
 
