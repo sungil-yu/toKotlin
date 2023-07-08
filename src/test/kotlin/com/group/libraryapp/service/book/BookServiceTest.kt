@@ -13,6 +13,7 @@ import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -89,5 +90,39 @@ class BookServiceTest @Autowired constructor(
 
         assertThat(results).hasSize(1)
         assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
+    }
+
+    @Test
+    fun checkLoanedBookCount() {
+        val user = userRepository.save(User("A", null))
+        userLoanHistoryRepository.saveAll(
+            listOf(
+                UserLoanHistory.fixture(user, "A"),
+                UserLoanHistory.fixture(user, "B", UserLoanStatus.RETURNED),
+                UserLoanHistory.fixture(user, "C", UserLoanStatus.RETURNED)
+            )
+        )
+
+        val result = bookService.countLoadedBook()
+
+        assertThat(result).isEqualTo(1)
+    }
+    @Test
+    @DisplayName("Verify that the stats for books by category are accurate.")
+    fun getBookStatistics() {
+        bookRepository.saveAll(listOf(
+            Book.fixture("A", BookType.COMPUTER),
+            Book.fixture("B", BookType.COMPUTER),
+            Book.fixture("A", BookType.SCIENCE)
+        ))
+
+        val results = bookService.getBookStatistics()
+        assertThat(results).hasSize(2)
+
+        val computers = results.first {it.type == BookType.COMPUTER}
+        assertThat(computers.count).isEqualTo(2)
+
+        val science = results.first { it.type == BookType.SCIENCE}
+        assertThat(science.count).isEqualTo(1)
     }
 }
