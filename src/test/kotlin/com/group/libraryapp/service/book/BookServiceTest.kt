@@ -120,9 +120,9 @@ class BookServiceTest @Autowired constructor(
         assertThat(results).hasSize(2)
 
         val computers = results.first {it.type == BookType.COMPUTER}
-        assertThat(computers.count).isEqualTo(2)
+        assertThat(computers.count).isEqualTo(2L)
 
         val science = results.first { it.type == BookType.SCIENCE}
-        assertThat(science.count).isEqualTo(1)
+        assertThat(science.count).isEqualTo(1L)
     }
 }
